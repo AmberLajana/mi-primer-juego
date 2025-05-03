@@ -2,17 +2,21 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Mi Primer Juego Final</title>
+  <title>Atrapa Todo</title>
   <link rel="stylesheet" href="style.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="logo.png" type="image/png">
 </head>
 <body>
 
+  <!-- Portada -->
   <div id="startScreen">
+    <img src="logo.png" alt="Logo del juego" style="width: 200px; margin-bottom: 20px;" />
     <h1 id="gameTitle">Atrapa Todo 🚀</h1>
     <button id="startButton" onclick="showMenu()">¡Comenzar!</button>
   </div>
 
+  <!-- Menú -->
   <div id="menu" style="display:none;">
     <h1>Selecciona tu personaje:</h1>
     <button onclick="chooseCharacter('blue')">🐱 Azul</button>
@@ -20,14 +24,110 @@
     <button onclick="chooseCharacter('pink')">🐷 Rosado</button>
     <br><br>
     <button onclick="startGame()">¡Jugar!</button>
+    <br>
+    <button onclick="showCredits()">📜 Créditos</button>
+    <br><br>
+    <button onclick="toggleDarkMode()">🌓 Modo Nocturno</button>
   </div>
 
+  <!-- Juego -->
   <canvas id="gameCanvas" width="400" height="600" style="display:none;"></canvas>
 
+  <!-- Botones de juego -->
+  <div id="restartContainer" style="display:none;">
+    <button id="restartButton" onclick="restartGame()">🔁 Reiniciar</button>
+    <button id="shareButton" onclick="shareGame()">📤 Compartir</button>
+  </div>
+
+  <!-- Controles móviles -->
   <div id="mobileControls" style="display:none;">
     <button id="leftBtn">⬅️</button>
     <button id="rightBtn">➡️</button>
   </div>
+
+  <!-- Créditos -->
+  <div id="creditsScreen" style="display:none;">
+    <h2>🎮 Créditos</h2>
+    <p>Juego desarrollado por: <strong>Tu Nombre Aquí</strong></p>
+    <p>Con ayuda de inteligencia artificial + mucha energía 🎉</p>
+    <p>2025 © Todos los derechos reservados.</p>
+    <button onclick="goBackToMenu()">🔙 Volver al menú</button>
+  </div>
+
+  <script>
+    let introAudio;
+
+    function showMenu() {
+      document.getElementById('startScreen').style.display = 'none';
+      document.getElementById('creditsScreen').style.display = 'none';
+      document.getElementById('menu').style.display = 'block';
+      stopIntroMusic();
+    }
+
+    function showCredits() {
+      document.getElementById('menu').style.display = 'none';
+      document.getElementById('creditsScreen').style.display = 'block';
+    }
+
+    function goBackToMenu() {
+      showMenu();
+    }
+
+    function shareGame() {
+      const gameURL = window.location.href;
+      if (navigator.share) {
+        navigator.share({
+          title: '¡Juega Atrapa Todo!',
+          text: '¡Atrévete a atrapar todos los objetos!',
+          url: gameURL,
+        }).catch(console.error);
+      } else {
+        const whatsapp = `https://wa.me/?text=${encodeURIComponent('¡Juega Atrapa Todo! 🎮 ' + gameURL)}`;
+        window.open(whatsapp, '_blank');
+        navigator.clipboard.writeText(gameURL).then(() => {
+          alert('¡Enlace copiado al portapapeles!');
+        });
+      }
+    }
+
+    // Música portada
+    document.getElementById('startButton').addEventListener('click', () => {
+      playIntroMusic();
+    }, { once: true });
+
+    function playIntroMusic() {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(220, ctx.currentTime);
+      gain.gain.setValueAtTime(0.05, ctx.currentTime);
+      osc.connect(gain).connect(ctx.destination);
+      osc.start();
+      introAudio = osc;
+    }
+
+    function stopIntroMusic() {
+      if (introAudio) {
+        introAudio.stop();
+        introAudio = null;
+      }
+    }
+
+    // 🌙 Modo nocturno
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+      const isDark = document.body.classList.contains('dark-mode');
+      localStorage.setItem('darkMode', isDark ? 'true' : 'false');
+    }
+
+    // Activar si estaba activado antes
+    window.onload = () => {
+      if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+      }
+    };
+  </script>
 
   <script src="game.js"></script>
 </body>
