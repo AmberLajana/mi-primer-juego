@@ -68,3 +68,78 @@ body {
     100% { opacity: 1; transform: translateY(0); }
   }
   
+  #restartContainer {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  #restartButton,
+  #shareButton {
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #00bcd4;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }  
+
+  #startScreen img {
+    animation: fadeIn 2s ease-in-out;
+    border-radius: 12px;
+  }
+  
+  #creditsScreen {
+    text-align: center;
+    padding: 30px;
+  }
+  
+  #creditsScreen button {
+    padding: 10px 20px;
+    margin-top: 20px;
+    font-size: 18px;
+    background-color: #607d8b;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  /* 🌙 Modo nocturno */
+body.dark-mode {
+  background-color: #121212;
+  color: #f1f1f1;
+}
+
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode p,
+body.dark-mode button {
+  color: #f1f1f1;
+}
+
+body.dark-mode canvas {
+  background-color: #1e1e1e;
+  border-color: #555;
+}
+
+body.dark-mode button {
+  background-color: #333;
+  border: 1px solid #555;
+}
+
+#gameCanvas.shake {
+  animation: shake 0.2s ease;
+}
+
+@keyframes shake {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(-4px, 0); }
+  40% { transform: translate(4px, 0); }
+  60% { transform: translate(-4px, 0); }
+  80% { transform: translate(4px, 0); }
+  100% { transform: translate(0, 0); }
+}
